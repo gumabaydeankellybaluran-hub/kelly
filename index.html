@@ -1342,6 +1342,30 @@ if (signInBtn) {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
 })();
+    const CACHE_NAME = "pwa-v1";
+const urlsToCache = [
+  "/project-name/",
+  "/project-name/index.html",
+  "/project-name/style.css",
+  "/project-name/script.js"
+];
+
+self.addEventListener("install", e => {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+  );
+});
+
+self.addEventListener("fetch", e => {
+  e.respondWith(
+    caches.match(e.request).then(res => res || fetch(e.request))
+  );
+});
+    if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/project-name/service-worker.js')
+    .then(() => console.log("PWA ready!"));
+}
+    
 </script>
 </body>
 </html>
